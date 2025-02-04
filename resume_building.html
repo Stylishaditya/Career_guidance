@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .input-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+      #preview {
+  background: white;
+  padding: 20px;
+  min-height: 842px;
+  width: 595px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: 'Arial', sans-serif;
+}
+
+.resume-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  border-bottom: 2px solid #333;
+  margin: 15px 0;
+  padding-bottom: 5px;
+  font-size: 18px;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+strong {
+  color: #2196F3;
+}
+/* Default Light Theme */
+body.light {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+#preview.light {
+    background: white;
+    color: black;
+}
+
+/* Dark Theme */
+body.dark {
+    background-color: #222;
+    color: white;
+}
+
+#preview.dark {
+    background: #333;
+    color: white;
+}
+
+/* Professional Theme */
+body.professional {
+    background-color: #ececec;
+    color: #333;
+}
+
+#preview.professional {
+    background: white;
+    color: #333;
+    font-family: 'Times New Roman', serif;
+    border: 2px solid #444;
+}
+
+/* Modern Theme */
+body.modern {
+    background-color: #e3f2fd;
+    color: #000;
+}
+
+#preview.modern {
+    background: #fff;
+    color: black;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
+}
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <div class="input-section">
+            <h2>Personal Information</h2>
+            <input type="text" id="name" placeholder="Full Name">
+            <input type="email" id="email" placeholder="Email">
+            <input type="tel" id="phone" placeholder="Phone">
+            <input type="text" id="address" placeholder="Address">
+        </div>
+
+        <div class="input-section">
+            <h2>Education</h2>
+            <div id="education-container">
+                <div class="education-entry">
+                    <input type="text" class="school" placeholder="School/University">
+                    <input type="text" class="degree" placeholder="Degree">
+                    <input type="text" class="graduation" placeholder="Graduation Year">
+                </div>
+            </div>
+            <button onclick="addEducation()">Add More</button>
+        </div>
+
+        <div class="input-section">
+            <h2>Work Experience</h2>
+            <div id="experience-container">
+                <div class="experience-entry">
+                    <input type="text" class="jobTitle" placeholder="Job Title">
+                    <input type="text" class="company" placeholder="Company">
+                    <textarea class="jobDescription" placeholder="Job Description"></textarea>
+                </div>
+            </div>
+            <button onclick="addExperience()">Add More</button>
+        </div>
+
+        <div class="input-section">
+            <h2>Skills</h2>
+            <textarea id="skills" placeholder="List your skills (comma-separated)"></textarea>
+        </div>
+
+        <div class="input-section">
+            <h2>Certifications</h2>
+            <textarea id="certifications" placeholder="Enter certifications"></textarea>
+        </div>
+
+        <div class="input-section">
+            <h2>Projects</h2>
+            <textarea id="projects" placeholder="Describe your projects"></textarea>
+        </div>
+        <div class="input-section">
+    <h2>Choose Resume Template</h2>
+    <select id="template-selector" onchange="changeTemplate()">
+        <option value="classic">Classic</option>
+        <option value="modern">Modern</option>
+        <option value="minimalist">Minimalist</option>
+    </select>
+</div>
+        <div class="input-section">
+    <h2>Choose Theme</h2>
+    <select id="theme-selector" onchange="changeTheme()">
+        <option value="light">Light</option>
+        <option value="professional">Professional</option>
+        <option value="modern">Modern</option>
+    </select>
+</div>
+
+        <button onclick="downloadPDF()">Download Resume</button>
+    </div>
+
+  <div id="preview">
+  <div class="resume-header">
+    <h1 id="preview-name">John Doe</h1>
+    <p id="preview-contact">
+      <span id="preview-email">john@example.com</span> |
+      <span id="preview-phone">(123) 456-7890</span><br>
+      <span id="preview-address">New York, USA</span>
+    </p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Education</h2>
+    <ul id="preview-education"></ul>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Work Experience</h2>
+    <ul id="preview-experience"></ul>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Skills</h2>
+    <p id="preview-skills"></p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Certifications</h2>
+    <p id="preview-certifications"></p>
+  </div>
+
+  <div class="section">
+    <h2 class="section-title">Projects</h2>
+    <p id="preview-projects"></p>
+  </div>
+</div>
+
+    <script>
+        function updatePreview() {
+    document.getElementById('preview-name').textContent = document.getElementById('name').value;
+    document.getElementById('preview-email').textContent = document.getElementById('email').value;
+    document.getElementById('preview-phone').textContent = document.getElementById('phone').value;
+    document.getElementById('preview-address').textContent = document.getElementById('address').value;
+
+    // Update Education Section
+    let educationHTML = "";
+    document.querySelectorAll(".education-entry").forEach(entry => {
+        if (entry.querySelector('.school').value) {
+            educationHTML += `<li><strong>${entry.querySelector('.school').value}</strong> - 
+                              ${entry.querySelector('.degree').value} (${entry.querySelector('.graduation').value})</li>`;
+        }
+    });
+    document.getElementById("preview-education").innerHTML = educationHTML;
+
+    // Update Experience Section
+    let experienceHTML = "";
+    document.querySelectorAll(".experience-entry").forEach(entry => {
+        if (entry.querySelector('.jobTitle').value) {
+            experienceHTML += `<li><strong>${entry.querySelector('.jobTitle').value}</strong> at 
+                               <strong>${entry.querySelector('.company').value}</strong><br>
+                               <small>${entry.querySelector('.jobDescription').value}</small></li>`;
+        }
+    });
+    document.getElementById("preview-experience").innerHTML = experienceHTML;
+
+    // Update Other Sections
+    document.getElementById('preview-skills').textContent = document.getElementById('skills').value;
+    document.getElementById('preview-certifications').textContent = document.getElementById('certifications').value;
+    document.getElementById('preview-projects').textContent = document.getElementById('projects').value;
+}
+        function addEducation() {
+            const container = document.getElementById("education-container");
+            const newEntry = document.createElement("div");
+            newEntry.classList.add("education-entry");
+            newEntry.innerHTML = `
+                <input type="text" class="school" placeholder="School/University">
+                <input type="text" class="degree" placeholder="Degree">
+                <input type="text" class="graduation" placeholder="Graduation Year">
+            `;
+            container.appendChild(newEntry);
+        }
+
+        function addExperience() {
+            const container = document.getElementById("experience-container");
+            const newEntry = document.createElement("div");
+            newEntry.classList.add("experience-entry");
+            newEntry.innerHTML = `
+                <input type="text" class="jobTitle" placeholder="Job Title">
+                <input type="text" class="company" placeholder="Company">
+                <textarea class="jobDescription" placeholder="Job Description"></textarea>
+            `;
+            container.appendChild(newEntry);
+        }
+
+        function downloadPDF() {
+            html2pdf().from(document.getElementById('preview')).save('resume.pdf');
+        }
+
+        document.querySelectorAll('input, textarea').forEach(el => {
+            el.addEventListener('input', updatePreview);
+        });
+        function changeTheme() {
+    let theme = document.getElementById("theme-selector").value;
+    document.body.className = theme;
+    document.getElementById("preview").className = theme;
+}
+function changeTemplate() {
+    let template = document.getElementById("template-selector").value;
+    let preview = document.getElementById("preview");
+
+    if (template === "classic") {
+        preview.style.border = "2px solid black";
+        preview.style.fontFamily = "Times New Roman, serif";
+    } 
+    else if (template === "modern") {
+        preview.style.border = "none";
+        preview.style.fontFamily = "Arial, sans-serif";
+        preview.style.boxShadow = "5px 5px 15px rgba(0,0,0,0.2)";
+    } 
+    else if (template === "minimalist") {
+        preview.style.border = "none";
+        preview.style.fontFamily = "Verdana, sans-serif";
+        preview.style.background = "#fff";
+    }
+}
+    </script>
+</body>
+</html>
