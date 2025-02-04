@@ -22,6 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("Login successful! Redirecting...");
     
     // Redirect to index.html
-    window.location.href = "index.html";
+    window.location.href = "Desktop.html";
   });
 });
