@@ -36,6 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("register successful! Redirecting...");
     
     // Redirect to index.html
-    window.location.href = "Login.html";
+    window.location.href = "index.html";
   });
 });
