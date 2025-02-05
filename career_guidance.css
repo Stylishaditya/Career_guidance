@@ -114,6 +114,7 @@ header {
   white-space: nowrap;
 }
 
+.dropdown:hover .dropdown-menu,
 .dropdown.active .dropdown-menu {
   display: block;
 }
